@@ -1,0 +1,34 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #f6f8fc;
+    justify-content: space-between;
+}
+.manageLogo {
+    display: flex;
+    align-items: center;
+}
+.menuGmail {
+    width: 24px;
+    height: 24px;
+    padding: 12px;
+    margin: 0 4px;
+    & svg {
+        width: 24px;
+    }
+}
+.manageSearch {
+    padding: 0 10px;
+    width: 722px;
+    height: 48px;
+    background-color: #eaf1fb;
+}
+.manageUser {
+    width: 174px;
+    height: 48px;
+    background-color: aqua;
+}
