@@ -6,7 +6,7 @@ const GoogleIcon = () => {
       height="24"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      class="BFr46e xduoyf"
+      className="BFr46e xduoyf"
     >
       <g id="qaEJec">
         <path
