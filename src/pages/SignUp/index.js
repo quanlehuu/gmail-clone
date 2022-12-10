@@ -8,41 +8,49 @@ import { z } from "zod";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const schema = z.object({
-  firstName: z
-    .string() // invalid_type
-    .trim()
-    .min(1, { message: "Enter first name" }), // too_small
-  lastName: z.string().trim().min(1, { message: "Enter last name" }),
-  username: z
-    .string()
-    .trim()
-    .min(1, { message: "Choose a Gmail address" })
-    .min(6, {
-      message: "Sorry, your username must be between 6 and 30 characters long.",
-    })
-    .max(30, {
-      message: "Sorry, your username must be between 6 and 30 characters long.",
-    })
-    .regex(/^[a-z1-9A-Z.]+$/gm, {
-      message:
-        "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
-    })
-    .regex(/[a-zA-Z]+/gm, {
-      message:
-        "Sorry, usernames of 8 or more characters must include at least one alphabetical character (a-z)",
-    }),
-  password: z
-    .string()
-    .trim()
-    .min(1, { message: "Enter a password" })
-    .min(8, { message: "Use 8 characters or more for your password" }),
-  confirm: z.string().trim().min(1, { message: "Confirm your password" }),
-});
+const schema = z
+  .object({
+    firstName: z
+      .string() // invalid_type
+      .trim()
+      .min(1, { message: "Enter first name" }), // too_small
+    lastName: z.string().trim().min(1, { message: "Enter last name" }),
+    username: z
+      .string()
+      .trim()
+      .min(1, { message: "Choose a Gmail address" })
+      .min(6, {
+        message:
+          "Sorry, your username must be between 6 and 30 characters long.",
+      })
+      .max(30, {
+        message:
+          "Sorry, your username must be between 6 and 30 characters long.",
+      })
+      .regex(/^[a-z1-9A-Z.]+$/gm, {
+        message:
+          "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
+      })
+      .regex(/[a-zA-Z]+/gm, {
+        message:
+          "Sorry, usernames of 8 or more characters must include at least one alphabetical character (a-z)",
+      }),
+    password: z
+      .string()
+      .trim()
+      .min(1, { message: "Enter a password" })
+      .min(8, { message: "Use 8 characters or more for your password" }),
+    confirm: z.string().trim().min(1, { message: "Confirm your password" }),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Password don't match",
+    path: ["confirm"],
+  });
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -67,7 +75,15 @@ function SignUp() {
   const onSubmit = (data) => {
     if (data.password == data.confirm) {
       setConfirm(false);
-      console.log(data);
+      setLoading(true);
+      fetch("http://goapi.cc:4000/sign-up", {
+        method: "POST",
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          console.log("Success:", result);
+        });
     } else {
       setConfirm(true);
     }
@@ -87,7 +103,6 @@ function SignUp() {
                     height="24"
                     xmlns="http://www.w3.org/2000/svg"
                     aria-hidden="true"
-                    class="l5Lhkf"
                   >
                     <g id="qaEJec">
                       <path
@@ -231,16 +246,8 @@ function SignUp() {
                       </span>
                     ) : (
                       <span>
-                        {confirm ? (
-                          <span className={styles.error}>
-                            Those passwords didn’t match. Try again.
-                          </span>
-                        ) : (
-                          <span>
-                            Use 8 or more characters with a mix of letters,
-                            numbers & symbols
-                          </span>
-                        )}
+                        Use 8 or more characters with a mix of letters, numbers
+                        & symbols
                       </span>
                     )}
                   </div>
@@ -260,6 +267,7 @@ function SignUp() {
                       variant="contained"
                       type="submit"
                       style={{ textTransform: "none" }}
+                      disabled={loading}
                     >
                       Next
                     </Button>
