@@ -7,47 +7,60 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useNavigate } from "react-router-dom";
 
-const schema = z.object({
-  firstName: z
-    .string() // invalid_type
-    .trim()
-    .min(1, { message: "Enter first name" }), // too_small
-  lastName: z.string().trim().min(1, { message: "Enter last name" }),
-  username: z
-    .string()
-    .trim()
-    .min(1, { message: "Choose a Gmail address" })
-    .min(6, {
-      message: "Sorry, your username must be between 6 and 30 characters long.",
-    })
-    .max(30, {
-      message: "Sorry, your username must be between 6 and 30 characters long.",
-    })
-    .regex(/^[a-z1-9A-Z.]+$/gm, {
-      message:
-        "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
-    })
-    .regex(/[a-zA-Z]+/gm, {
-      message:
-        "Sorry, usernames of 8 or more characters must include at least one alphabetical character (a-z)",
-    }),
-  password: z
-    .string()
-    .trim()
-    .min(1, { message: "Enter a password" })
-    .min(8, { message: "Use 8 characters or more for your password" }),
-  confirm: z.string().trim().min(1, { message: "Confirm your password" }),
-});
+const schema = z
+  .object({
+    firstName: z
+      .string() // invalid_type
+      .trim()
+      .min(1, { message: "Enter first name" }), // too_small
+    lastName: z.string().trim().min(1, { message: "Enter last name" }),
+    username: z
+      .string()
+      .trim()
+      .min(1, { message: "Choose a Gmail address" })
+      .min(6, {
+        message:
+          "Sorry, your username must be between 6 and 30 characters long.",
+      })
+      .max(30, {
+        message:
+          "Sorry, your username must be between 6 and 30 characters long.",
+      })
+      .regex(/^[a-z1-9A-Z.]+$/gm, {
+        message:
+          "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
+      })
+      .regex(/[a-zA-Z]+/gm, {
+        message:
+          "Sorry, usernames of 8 or more characters must include at least one alphabetical character (a-z)",
+      }),
+    password: z
+      .string()
+      .trim()
+      .min(1, { message: "Enter a password" })
+      .min(8, { message: "Use 8 characters or more for your password" }),
+    confirm: z.string().trim().min(1, { message: "Confirm your password" }),
+  })
+  .refine((data) => data.password === data.confirm, {
+    message: "Those passwords didn’t match. Try again.",
+    path: ["confirm"],
+  });
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
-  const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(
+    " Something went wrong! Please try later!"
+  );
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
-    watch,
-    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -64,13 +77,34 @@ function SignUp() {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = (data) => {
-    if (data.password == data.confirm) {
-      setConfirm(false);
-      console.log(data);
-    } else {
-      setConfirm(true);
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setErrorMessage("");
+    setUsernameError(false);
+    console.log(data);
+    const res = await fetch("http://goapi.cc:4000/sign-up", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      const result = await res.json();
+      console.log("resdata:", result);
+      const token = result.result.data.token;
+      localStorage.setItem("token", token);
+      setLoading(false);
+      navigate("/");
+      return;
     }
+
+    if (res.status === 400) {
+      // bad input
+      setUsernameError(true);
+      setLoading(false);
+      return;
+    }
+
+    setErrorMessage("Something went wrong! Please try later!");
+    setLoading(false);
   };
 
   return (
@@ -87,7 +121,6 @@ function SignUp() {
                     height="24"
                     xmlns="http://www.w3.org/2000/svg"
                     aria-hidden="true"
-                    class="l5Lhkf"
                   >
                     <g id="qaEJec">
                       <path
@@ -140,6 +173,7 @@ function SignUp() {
                       variant="outlined"
                       size="small"
                       {...register("firstName")}
+                      disabled={loading}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -150,6 +184,7 @@ function SignUp() {
                       name="lastName"
                       variant="outlined"
                       {...register("lastName")}
+                      disabled={loading}
                       error={errors.lastName ? true : false}
                       size="small"
                     />
@@ -176,7 +211,8 @@ function SignUp() {
                       label="UserName"
                       variant="outlined"
                       {...register("username")}
-                      error={errors.username ? true : false}
+                      error={errors.username || usernameError}
+                      disabled={loading}
                       size="small"
                       InputProps={{
                         endAdornment: (
@@ -187,9 +223,11 @@ function SignUp() {
                       }}
                     />
                     <div className={styles.gmailNote}>
-                      {errors.username ? (
+                      {errors.username || usernameError ? (
                         <span className={styles.error}>
-                          {errors.username.message}
+                          {usernameError
+                            ? "This username is existing, please try another one"
+                            : errors.username.message}
                         </span>
                       ) : (
                         <span>You can use letters, numbers & periods</span>
@@ -200,8 +238,9 @@ function SignUp() {
                   <Grid item xs={12} md={6}>
                     <TextField
                       fullWidth
-                      error={errors.password || confirm ? true : false}
+                      error={errors.password}
                       {...register("password")}
+                      disabled={loading}
                       label="Password"
                       variant="outlined"
                       size="small"
@@ -214,6 +253,7 @@ function SignUp() {
                       id="outlined-basic"
                       label="Confirm"
                       type={showPassword ? "text" : "password"}
+                      disabled={loading}
                       variant="outlined"
                       size="small"
                       error={!errors.password && errors.confirm ? true : false}
@@ -231,16 +271,10 @@ function SignUp() {
                       </span>
                     ) : (
                       <span>
-                        {confirm ? (
-                          <span className={styles.error}>
-                            Those passwords didn’t match. Try again.
-                          </span>
-                        ) : (
-                          <span>
-                            Use 8 or more characters with a mix of letters,
-                            numbers & symbols
-                          </span>
-                        )}
+                        <span>
+                          Use 8 or more characters with a mix of letters,
+                          numbers & symbols
+                        </span>
                       </span>
                     )}
                   </div>
@@ -252,17 +286,23 @@ function SignUp() {
                     />
                     Show Password
                   </label>
+                  <div className={styles.note}>
+                    {errorMessage && (
+                      <span className={styles.error}>{errorMessage}</span>
+                    )}
+                  </div>
                   <div className={styles.registerEnd}>
                     <Link to="/signin" className={styles.highlight}>
                       Sign in instead
                     </Link>
-                    <Button
+                    <LoadingButton
+                      loading={loading}
                       variant="contained"
                       type="submit"
                       style={{ textTransform: "none" }}
                     >
                       Next
-                    </Button>
+                    </LoadingButton>
                   </div>
                 </Grid>
               </form>
