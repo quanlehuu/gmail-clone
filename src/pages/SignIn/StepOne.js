@@ -10,24 +10,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 
 const schema = z.object({
-  email: z
-    .string() // invalid_type
-    .trim()
-    .min(1, { message: "Enter an email" }),
+  email: z.string().trim().min(1, { message: "Enter an email" }),
 });
-function StepOne({ onSubmit, notValue }) {
+function StepOne({ onNext, email }) {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: "",
-      password: "",
+      email: email,
     },
     resolver: zodResolver(schema),
   });
+  const [useNameError, setUseNameError] = useState(false);
+  const onSubmit = (data) => {
+    fetch(
+      `http://goapi.cc:4000/check-username?input=${JSON.stringify({
+        username: data.email,
+      })}`
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        if (result.result.data) {
+          setUseNameError(false);
+          onNext(data.email);
+        } else {
+          setUseNameError(true);
+        }
+      });
+  };
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.GoogleIcon}>
@@ -44,9 +58,8 @@ function StepOne({ onSubmit, notValue }) {
               label="Email"
               variant="outlined"
               {...register("email")}
-              helperText={errors.email && errors.email.message}
             />
-            {notValue ? (
+            {useNameError ? (
               <p className={styles.errol}>Couldn’t find your Google Account</p>
             ) : (
               errors.email && (
