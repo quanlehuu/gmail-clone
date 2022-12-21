@@ -78,28 +78,35 @@ function SignUp() {
   const onSubmit = async (data) => {
     setLoading(true);
     setUsernameError(false);
-    const res = await fetch("http://goapi.cc:4000/sign-up", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    if (res.ok) {
-      const result = await res.json();
-      const token = result.result.data.token;
-      localStorage.setItem("token", token);
-      setLoading(false);
-      navigate("/");
-      return;
-    }
+    try {
+      const res = await fetch("http://goapi.cc:4000/sign-up", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const result = await res.json();
+        const token = result.result.data.token;
+        localStorage.setItem("token", token);
+        navigate("/");
+        return;
+      }
 
-    if (res.status === 400) {
-      // bad input
-      setUsernameError(true);
-      setLoading(false);
-      return;
-    }
+      if (res.status === 400) {
+        // bad input
+        setUsernameError(true);
+        return;
+      }
 
-    setErrorMessage("Something went wrong! Please try later!");
-    setLoading(false);
+      throw res;
+    } catch (e) {
+      console.error(e);
+      setErrorMessage("Something went wrong! Please try later!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
