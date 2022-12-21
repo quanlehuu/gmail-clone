@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+.containerLeft {
+  width: 256px;
+  height: 553px;
+  background-color: #f6f8fc;
+  margin-top: 64px;
+}
+.containerRight {
+  min-width: 56px;
+  height: 553px;
+  margin-top: 64px;
+  background-color: #f6f8fc;
+}
