@@ -53,9 +53,7 @@ function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(
-    " Something went wrong! Please try later!"
-  );
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -79,7 +77,6 @@ function SignUp() {
 
   const onSubmit = async (data) => {
     setLoading(true);
-    setErrorMessage("");
     setUsernameError(false);
     const res = await fetch("http://goapi.cc:4000/sign-up", {
       method: "POST",
@@ -159,7 +156,6 @@ function SignUp() {
                   </svg>
                 </div>
                 <p className={styles.contentTitle}>Create a Google Account</p>
-                <span>Enter your child’s account information</span>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={1} rowSpacing={2}>
