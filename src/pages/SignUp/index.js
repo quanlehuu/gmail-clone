@@ -81,14 +81,12 @@ function SignUp() {
     setLoading(true);
     setErrorMessage("");
     setUsernameError(false);
-    console.log(data);
     const res = await fetch("http://goapi.cc:4000/sign-up", {
       method: "POST",
       body: JSON.stringify(data),
     });
     if (res.ok) {
       const result = await res.json();
-      console.log("resdata:", result);
       const token = result.result.data.token;
       localStorage.setItem("token", token);
       setLoading(false);
