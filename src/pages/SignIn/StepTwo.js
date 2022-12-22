@@ -38,14 +38,15 @@ function StepTwo({ onBack, username }) {
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     setErrorMessage("");
-    console.log(data);
     const res = await fetch("http://goapi.cc:4000/sign-in", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     });
     if (res.ok) {
       const result = await res.json();
-      console.log("resdata:", result);
       const token = result.result.data.token;
       localStorage.setItem("token", token);
       navigate("/");
