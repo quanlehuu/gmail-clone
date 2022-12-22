@@ -1,0 +1,138 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.wrapperContent {
+  width: 748px;
+  min-height: 500px;
+  border: 0.2px solid #dadce0;
+  border-radius: 5px;
+  margin: 0 auto;
+  padding: 48px 40px 36px;
+  margin-top: 30px;
+}
+.yourName {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.firtName {
+  padding: 0;
+  margin: 0;
+}
+.contentTitle {
+  margin-top: 10px;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+.title {
+  margin-bottom: 20px;
+}
+.space {
+  padding: 10px 0;
+}
+.email {
+  width: 100%;
+  display: block;
+}
+.container {
+  display: flex;
+  padding: 0 48px;
+  margin: 0 -48px;
+  overflow: hidden;
+  flex-basis: 480px;
+}
+.containerItem1 {
+  width: 300px;
+  font-size: 16px;
+  text-align: center;
+  padding-left: 48px;
+}
+.gmailNote {
+  color: #5f6368;
+  font-size: 12px;
+  padding-bottom: 8px;
+}
+.note {
+  color: #5f6368;
+  font-size: 12px;
+  padding-left: 8px;
+  padding-bottom: 8px;
+}
+.highLight {
+  font-size: 14px;
+  color: #1a73e8;
+}
+.error {
+  color: #d93025;
+}
+.checkboxBtn {
+  padding-left: 8px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #202124;
+  width: 100%;
+  padding-top: 8px;
+  margin-bottom: 10px;
+}
+.imgRegister {
+  width: 244px;
+  height: 244px;
+  margin: 0 auto;
+  margin: 72px 4px 0;
+  &img {
+    max-width: 100%;
+  }
+}
+.gmail {
+  color: black;
+}
+.checkbox {
+  font-size: 20px;
+  margin-right: 8px;
+  width: 18px;
+  height: 18px;
+}
+.registerEnd {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 38px;
+  padding-left: 8px;
+}
+.highlight {
+  color: #1a73e8;
+  font-size: 14px;
+  text-decoration: none;
+}
+@media only screen and (max-width: 1024px) {
+  .wrapperContent {
+    width: 448px;
+  }
+  .containerItem1 {
+    display: none;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .wrapperContent {
+    border: none;
+  }
+  .container {
+    margin: 0;
+    padding: 0;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .wrapperContent {
+    width: 100%;
+  }
+  .container {
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+}
