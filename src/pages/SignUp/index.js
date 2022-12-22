@@ -29,7 +29,7 @@ const schema = z
         message:
           "Sorry, your username must be between 6 and 30 characters long.",
       })
-      .regex(/^[a-z1-9A-Z.]+$/gm, {
+      .regex(/^[a-z0-9A-Z.]+$/gm, {
         message:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
       })
@@ -41,7 +41,23 @@ const schema = z
       .string()
       .trim()
       .min(1, { message: "Enter a password" })
-      .min(8, { message: "Use 8 characters or more for your password" }),
+      .min(8, { message: "Use 8 characters or more for your password" })
+      .regex(/^[a-z0-9A-Z\\.$%@!~#^&*()_+=-{}\[\]]+$/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      })
+      .regex(/[a-zA-Z]+/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      })
+      .regex(/[0-9]+/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      })
+      .regex(/[\\.$%@!~#^&*()_+=\-{}\[\]\/]+/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      }),
     confirm: z.string().trim().min(1, { message: "Confirm your password" }),
   })
   .refine((data) => data.password === data.confirm, {
