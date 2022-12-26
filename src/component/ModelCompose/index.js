@@ -4,16 +4,27 @@ import MinusIcon from "../../assets/Icon/MinusIcon";
 import ZoomIcon from "../../assets/Icon/ZoomIcon";
 import ZoomOutIcon from "../../assets/Icon/ZoomOutIcon";
 import TrashIcon from "../../assets/Icon/TrashIcon";
-function ModelCompose({
-  zoom,
-  zoomOut,
-  focus,
-  handleBlur,
-  handleClose,
-  handleFocus,
-  handleZoom,
-  handleZoomOut,
-}) {
+import { useState } from "react";
+function ModelCompose({ setCompose }) {
+  const [focus, setFocus] = useState(false);
+  const [zoom, setZoom] = useState(false);
+  const [zoomOut, setZoomOut] = useState(false);
+  const handleClose = () => {
+    setCompose(false);
+  };
+  const handleFocus = () => {
+    setFocus(true);
+  };
+  const handleBlur = () => {
+    setFocus(false);
+  };
+  const handleZoom = () => {
+    setZoom(!zoom);
+    setZoomOut(false);
+  };
+  const handleZoomOut = () => {
+    setZoomOut(!zoomOut);
+  };
   return (
     <div
       className={

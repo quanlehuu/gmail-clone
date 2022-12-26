@@ -32,7 +32,6 @@ function StepOne({ onNext, email }) {
     )
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         if (result.result.data) {
           setUseNameError(false);
           onNext(data.email);
