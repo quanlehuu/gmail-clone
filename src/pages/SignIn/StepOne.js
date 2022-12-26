@@ -25,20 +25,38 @@ function StepOne({ onNext, email }) {
   });
   const [useNameError, setUseNameError] = useState(false);
   const onSubmit = (data) => {
-    fetch(
-      `http://goapi.cc:4000/check-username?input=${JSON.stringify({
-        username: data.email,
-      })}`
-    )
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.result.data) {
-          setUseNameError(false);
-          onNext(data.email);
-        } else {
-          setUseNameError(true);
-        }
-      });
+    if (data.email.indexOf("@gmail.com") >= 0) {
+      const myEmail = data.email.split("@gmail.com");
+      fetch(
+        `http://goapi.cc:4000/check-username?input=${JSON.stringify({
+          username: myEmail[0],
+        })}`
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.result.data) {
+            setUseNameError(false);
+            onNext(myEmail[0]);
+          } else {
+            setUseNameError(true);
+          }
+        });
+    } else {
+      fetch(
+        `http://goapi.cc:4000/check-username?input=${JSON.stringify({
+          username: data.email,
+        })}`
+      )
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.result.data) {
+            setUseNameError(false);
+            onNext(data.email);
+          } else {
+            setUseNameError(true);
+          }
+        });
+    }
   };
 
   return (
