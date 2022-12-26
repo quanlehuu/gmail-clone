@@ -317,6 +317,7 @@ function SignUp() {
                       variant="contained"
                       type="submit"
                       style={{ textTransform: "none" }}
+                      disabled={loading}
                     >
                       Next
                     </LoadingButton>

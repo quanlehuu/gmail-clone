@@ -1,0 +1,101 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+.loginContainer {
+  border: 0.2px solid #dadce0;
+  padding: 48px 40px 36px;
+  text-align: center;
+  width: 448px;
+  margin-top: 40px;
+}
+.titleLogin {
+  color: #202124;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.3333;
+  padding-top: 14px;
+}
+.titleLoginItem {
+  color: #202124;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.3333;
+  letter-spacing: 0.1px;
+  padding-top: 9px;
+}
+.loginForm {
+  padding: 24px 0 0;
+}
+.signinPrivate {
+  color: #5f6368;
+  font-size: 14px;
+  text-align: left;
+  line-height: 1.4;
+  padding-top: 8px;
+}
+.highlight {
+  color: #1a73e8;
+  font-weight: 500;
+}
+.signinEnd {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 80px;
+}
+.directional {
+  text-decoration: none;
+  color: #1a73e8;
+  font-weight: 500;
+}
+.errol {
+  width: 100%;
+  text-align: left;
+  color: #d93025;
+  font-size: 12px;
+  margin-top: 2px;
+}
+.gmailUser {
+  margin: 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #dadce0;
+  color: #3c4043;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  border-radius: 16px;
+  padding: 0 10px;
+}
+.iconPeople {
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+}
+.iconDown {
+  margin-left: 4px;
+  font-size: 18px;
+  width: 16px;
+  height: 16px;
+}
+.checkboxBtn {
+  margin-right: 16px;
+  font-weight: 700;
+  width: 20px;
+}
+.manageCheckbox {
+  display: flex;
+}
+@media only screen and (max-width: 601px) {
+  .loginContainer {
+    border: none;
+  }
+}
