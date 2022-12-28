@@ -5,18 +5,16 @@ import ZoomIcon from "../../assets/Icon/ZoomIcon";
 import ZoomOutIcon from "../../assets/Icon/ZoomOutIcon";
 import TrashIcon from "../../assets/Icon/TrashIcon";
 import { useState } from "react";
+import Recipient from "../Recipients";
+
 function ModelCompose({ setCompose }) {
-  const [focus, setFocus] = useState(false);
   const [zoom, setZoom] = useState(false);
   const [zoomOut, setZoomOut] = useState(false);
+  const [userNameEmail, setUserNameEmail] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const handleClose = () => {
     setCompose(false);
-  };
-  const handleFocus = () => {
-    setFocus(true);
-  };
-  const handleBlur = () => {
-    setFocus(false);
   };
   const handleZoom = () => {
     setZoom(!zoom);
@@ -24,6 +22,16 @@ function ModelCompose({ setCompose }) {
   };
   const handleZoomOut = () => {
     setZoomOut(!zoomOut);
+  };
+  const handleChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleChangeContent = (e) => {
+    setContent(e.target.value);
+  };
+  const handleSubmit = (event) => {
+    console.log(title, content, userNameEmail);
+    event.preventDefault();
   };
   return (
     <div
@@ -66,34 +74,27 @@ function ModelCompose({ setCompose }) {
               </button>
             </div>
           </div>
-          <form className={styles.composeForm}>
-            {focus ? (
-              <div className={styles.inputSpecial}>
-                <span>Đến</span>
-                <input
-                  className={styles.inputBtnFocus}
-                  type="text"
-                  onBlur={handleBlur}
-                />
-              </div>
-            ) : (
-              <input
-                className={styles.inputBtn}
-                onClick={handleFocus}
-                type="text"
-                placeholder="Người nhận"
-              />
-            )}
+          <form onSubmit={handleSubmit} className={styles.composeForm}>
+            <Recipient
+              setUserNameEmail={setUserNameEmail}
+              userNameEmail={userNameEmail}
+            />
             <input
               className={styles.inputBtn}
               type="text"
               placeholder="Tiêu đề"
+              value={title}
+              onChange={handleChangeTitle}
             />
             <textarea
               className={zoom ? styles.contentZoom : styles.content}
+              value={content}
+              onChange={handleChangeContent}
             ></textarea>
             <div className={styles.btc}>
-              <button className={styles.sendBtn}>Send</button>
+              <button className={styles.sendBtn} type="submit">
+                Send
+              </button>
               <button className={styles.trashIcon}>
                 <TrashIcon />
               </button>

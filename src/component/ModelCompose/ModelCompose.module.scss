@@ -61,13 +61,6 @@
   outline: none;
   background-color: #f2f6fc;
 }
-.composeForm {
-  padding: 0 16px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
 .inputBtn {
   width: 100%;
   outline: none;
@@ -76,25 +69,12 @@
   border: none;
   border-bottom: 1px solid #cfcfcf;
 }
-.inputSpecial {
+.composeForm {
+  padding: 0 16px;
+  width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  outline: none;
-  border: none;
-  border-bottom: 1px solid #cfcfcf;
-  color: #444746;
-  font-size: 14px;
-  height: 36px;
-  & input {
-    width: 91%;
-    outline: none;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border: none;
-    font-size: 14px;
-    border-bottom: 1px solid #cfcfcf;
-  }
+  flex-direction: column;
+  flex-grow: 1;
 }
 .content {
   width: 100%;
@@ -103,6 +83,9 @@
   flex-grow: 1;
   resize: none;
   padding: 10px 0;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 20px;
+  color: #222222;
 }
 .contentZoom {
   width: 100%;
