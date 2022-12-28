@@ -1,20 +1,23 @@
 import { useRef } from "react";
 import { useState } from "react";
 import styles from "./Recipient.module.scss";
+import { Controller, useFormContext } from "react-hook-form";
 
-function Recipient({ setUserNameEmail, userNameEmail }) {
+function Recipient() {
   const [focus, setFocus] = useState(false);
   const recipients = useRef();
+
+  const { register, watch, control } = useFormContext();
+  const email = watch("email");
+  const handleBlur = (event) => {
+    setFocus(false);
+  };
+
   const handleFocus = () => {
     setFocus(true);
     recipients.current.focus();
   };
-  const handleBlur = () => {
-    setFocus(false);
-  };
-  const handleChangeUserNameEmail = (e) => {
-    setUserNameEmail(e.target.value);
-  };
+
   return (
     <div className={styles.inputSpecial}>
       <button
@@ -22,15 +25,23 @@ function Recipient({ setUserNameEmail, userNameEmail }) {
         onClick={handleFocus}
         type="button"
       >
-        {focus ? "Đến" : userNameEmail ? userNameEmail : "Người nhận"}
+        {focus ? "Đến" : email ? email : "Người nhận"}
       </button>
-      <input
-        className={focus ? styles.inputBtnFocus : styles.inputHide}
-        ref={recipients}
-        type="text"
-        onBlur={handleBlur}
-        value={userNameEmail}
-        onChange={handleChangeUserNameEmail}
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, value } }) => {
+          return (
+            <input
+              className={focus ? styles.inputBtnFocus : styles.inputHide}
+              type="text"
+              value={value}
+              onChange={onChange}
+              onBlur={handleBlur}
+              ref={recipients}
+            />
+          );
+        }}
       />
     </div>
   );
