@@ -1,0 +1,97 @@
+.SidebarMenu {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-right: 16px;
+}
+.SidebarMenuZoomOut {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-top: 16px;
+}
+.SidebarMenu {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  margin-right: 16px;
+  margin-top: 16px;
+}
+.menuItem {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  height: 32px;
+  border-radius: 0 55px 55px 0;
+  padding-right: 0;
+  max-width: 240px;
+  min-width: 240px;
+  text-decoration: none;
+}
+.menuItemZoomOut {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  height: 32px;
+  border-radius: 0 55px 55px 0;
+  padding-right: 0;
+  max-width: 240px;
+  text-decoration: none;
+}
+.menuItemZoomOut.active {
+  background-color: #f6f8fc;
+  .menuItemWrapper {
+    padding: 0;
+    .menuItemIcon {
+      margin-right: 21px;
+      margin-left: 21px;
+      text-align: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 99px;
+      background-color: #d3e3fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+.menuItem:not(.active):hover {
+  background-color: rgba(32, 33, 36, 0.059);
+}
+.active {
+  background-color: #d3e3fd;
+  & .icon {
+    color: black;
+  }
+}
+.menuItemWrapper {
+  padding: 0 12px 0 27px;
+  display: flex;
+  align-items: center;
+}
+.menuItemIcon {
+  margin-right: 18px;
+  width: 20px;
+  height: 20px;
+  color: #717373;
+  font-size: 18px;
+  .icon {
+    font-size: 18px;
+  }
+  &svg {
+    width: 100%;
+  }
+}
+.icon {
+  width: 18px;
+}
+.menuItemContent {
+  text-decoration: none;
+  color: black;
+}
+.menuItemContent:hover {
+  color: #001d35;
+}
