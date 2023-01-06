@@ -2,14 +2,23 @@ import { useRef } from "react";
 import { useState } from "react";
 import styles from "./Recipient.module.scss";
 import { Controller, useFormContext } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const schema = z.object({
+  to: z
+    .string() // invalid_type
+    .trim()
+    .min(1, { message: "Please specify at least one recipient." }),
+});
 
 function Recipient() {
   const [focus, setFocus] = useState(false);
   const recipients = useRef();
 
-  const { register, watch, control } = useFormContext();
-  const email = watch("email");
-  const handleBlur = (event) => {
+  const { watch, control } = useFormContext();
+  const to = watch("to");
+  const handleBlur = () => {
     setFocus(false);
   };
 
@@ -25,11 +34,11 @@ function Recipient() {
         onClick={handleFocus}
         type="button"
       >
-        {focus ? "Đến" : email ? email : "Người nhận"}
+        {focus ? "Đến" : to ? to : "Người nhận"}
       </button>
       <Controller
         control={control}
-        name="email"
+        name="to"
         render={({ field: { onChange, value } }) => {
           return (
             <input

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../constants";
 
 const schema = z
   .object({
@@ -76,7 +77,7 @@ function SignUp() {
     if (data.password == data.confirm) {
       setConfirm(false);
       setLoading(true);
-      fetch("http://goapi.cc:4000/sign-up", {
+      fetch(`${API_URL}/sign-up`, {
         method: "POST",
         body: JSON.stringify(data),
       })
