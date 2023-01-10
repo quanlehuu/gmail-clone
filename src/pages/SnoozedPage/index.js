@@ -1,5 +1,14 @@
+import styles from "./SnoozedPage.module.scss";
+
 function SnoozedPage() {
-  return <div>this is SnoozedPage</div>;
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.topbar}>
+        this is SnoozedPage
+        <div></div>
+      </div>
+    </div>
+  );
 }
 
 export default SnoozedPage;

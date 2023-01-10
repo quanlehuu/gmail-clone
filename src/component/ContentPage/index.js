@@ -9,7 +9,7 @@ function ContentPage({ children }) {
     setOpen(!open);
   };
   return (
-    <did>
+    <div>
       <Header onToggleSidebarClick={handleToggleSidebar} />
       <div className={styles.wrapper}>
         <div className={styles.sidebar}>
@@ -17,7 +17,7 @@ function ContentPage({ children }) {
         </div>
         <div className={styles.container}>{children}</div>
       </div>
-    </did>
+    </div>
   );
 }
 

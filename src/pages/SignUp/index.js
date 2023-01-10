@@ -5,10 +5,11 @@ import { Controller, useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../../UserContext";
 
 const schema = z
   .object({
@@ -66,12 +67,17 @@ const schema = z
   });
 
 function SignUp() {
+  const user = useContext(UserContext).user;
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
   const {
     register,
     handleSubmit,
@@ -118,7 +124,6 @@ function SignUp() {
 
       throw res;
     } catch (e) {
-      console.error(e);
       setErrorMessage("Something went wrong! Please try later!");
     } finally {
       setLoading(false);

@@ -7,10 +7,12 @@ import SentPage from "../pages/SentPage";
 import SnoozedPage from "../pages/SnoozedPage";
 import StarredPage from "../pages/StarredPage";
 import DraftsPage from "../pages/DraftsPage";
+import NotFound from "../component/NotFoundPage/NotFound";
 
 const publicRoutes = [
   { path: config.routes.signin, component: SignIn },
   { path: config.routes.signup, component: SignUp },
+  { path: "*", component: NotFound },
 ];
 export { publicRoutes };
 const privateRouter = [
@@ -20,5 +22,6 @@ const privateRouter = [
   { path: config.routes.starred, component: StarredPage },
   { path: config.routes.drafts, component: DraftsPage },
   { path: config.routes.snoozed, component: SnoozedPage },
+  { path: "*", component: NotFound },
 ];
 export { privateRouter };

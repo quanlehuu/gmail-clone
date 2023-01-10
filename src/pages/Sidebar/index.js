@@ -38,13 +38,11 @@ const array = [
 ];
 function Sidebar({ open }) {
   const location = useLocation();
-  console.log(location.pathname);
   return (
     <ul className={open ? styles.SidebarMenu : styles.SidebarMenuZoomOut}>
       {array.map((item) => {
-        const path = item.path;
         return (
-          <li>
+          <li key={item.path}>
             <Link
               className={clsx(
                 item.path === location.pathname ? styles.active : "",
@@ -58,34 +56,13 @@ function Sidebar({ open }) {
               <div className={styles.menuItemWrapper}>
                 <span className={styles.menuItemIcon}>{item.icon}</span>
                 {open && (
-                  <a href="#" className={styles.menuItemContent}>
-                    {item.lable}
-                  </a>
+                  <span className={styles.menuItemContent}>{item.lable}</span>
                 )}
               </div>
             </Link>
           </li>
         );
       })}
-      <li>
-        <Link
-          className={clsx("", {
-            [styles.menuItem]: open,
-            [styles.menuItemZoomOut]: !open,
-          })}
-        >
-          <div className={styles.menuItemWrapper}>
-            <span className={styles.menuItemIcon}>
-              <ArrowDropDownIcon className={styles.icon} />
-            </span>
-            {open && (
-              <a href="#" className={styles.menuItemContent}>
-                Danh sách mở rộng
-              </a>
-            )}
-          </div>
-        </Link>
-      </li>
     </ul>
   );
 }

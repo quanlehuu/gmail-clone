@@ -7,8 +7,9 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../../UserContext";
 
 const schema = z.object({
   username: z.string().trim().min(6).max(30),
@@ -36,6 +37,7 @@ function StepTwo({ onBack, username }) {
     setShowPassWord(!showPassword);
   };
   const navigate = useNavigate();
+  const setUser = useContext(UserContext).setUser;
   const onSubmit = async (data) => {
     setErrorMessage("");
     const res = await fetch("http://goapi.cc:4000/sign-in", {
@@ -50,6 +52,7 @@ function StepTwo({ onBack, username }) {
       const token = result.result.data.token;
       localStorage.setItem("token", token);
       navigate("/");
+      setUser(result.result.data.user);
     }
     if (res.status === 400) {
       setErrorMessage("Username or password is wrong");
