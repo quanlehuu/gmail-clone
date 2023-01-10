@@ -9,6 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../constants";
 import UserContext from "../../UserContext";
 
 const schema = z.object({
@@ -40,7 +41,7 @@ function StepTwo({ onBack, username }) {
   const { setUser } = useContext(UserContext);
   const onSubmit = async (data) => {
     setErrorMessage("");
-    const res = await fetch("http://goapi.cc:4000/sign-in", {
+    const res = await fetch(`${API_URL}/sign-in`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

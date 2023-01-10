@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { API_URL } from "../../constants";
 
 const schema = z.object({
   email: z.string().trim().min(1, { message: "Enter an email" }),
@@ -30,7 +31,7 @@ function StepOne({ onNext, email }) {
       username = data.email.split("@gmail.com")[0];
     }
     fetch(
-      `http://goapi.cc:4000/check-username?input=${JSON.stringify({
+      `${API_URL}/check-username?input=${JSON.stringify({
         username: username,
       })}`
     )
