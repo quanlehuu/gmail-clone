@@ -5,9 +5,12 @@ import { Controller, useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { API_URL } from "../../constants";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useNavigate } from "react-router-dom";
+import UserContext from "../../UserContext";
 
 const schema = z
   .object({
@@ -28,7 +31,7 @@ const schema = z
         message:
           "Sorry, your username must be between 6 and 30 characters long.",
       })
-      .regex(/^[a-z1-9A-Z.]+$/gm, {
+      .regex(/^[a-z0-9A-Z.]+$/gm, {
         message:
           "Sorry, only letters (a-z), numbers (0-9), and periods (.) are allowed.",
       })
@@ -40,23 +43,46 @@ const schema = z
       .string()
       .trim()
       .min(1, { message: "Enter a password" })
-      .min(8, { message: "Use 8 characters or more for your password" }),
+      .min(8, { message: "Use 8 characters or more for your password" })
+      .regex(/^[a-z0-9A-Z\\.$%@!~#^&*()_+=-{}\[\]]+$/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      })
+      .regex(/[a-zA-Z]+/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      })
+      .regex(/[0-9]+/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      })
+      .regex(/[\\.$%@!~#^&*()_+=\-{}\[\]\/]+/gm, {
+        message:
+          "Please choose a stronger password. Try a mix of letters, numbers, and symbols.",
+      }),
     confirm: z.string().trim().min(1, { message: "Confirm your password" }),
   })
   .refine((data) => data.password === data.confirm, {
-    message: "Password don't match",
+    message: "Those passwords didn’t match. Try again.",
     path: ["confirm"],
   });
 
 function SignUp() {
+  const user = useContext(UserContext).user;
   const [showPassword, setShowPassword] = useState(false);
-  const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [usernameError, setUsernameError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
   const {
     register,
     handleSubmit,
-    watch,
-    control,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -73,20 +99,37 @@ function SignUp() {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = (data) => {
-    if (data.password == data.confirm) {
-      setConfirm(false);
-      setLoading(true);
-      fetch(`${API_URL}/sign-up`, {
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setUsernameError(false);
+    try {
+      const res = await fetch(`${API_URL}/sign-up`, {
         method: "POST",
         body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          console.log("Success:", result);
-        });
-    } else {
-      setConfirm(true);
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const result = await res.json();
+        const token = result.result.data.token;
+        localStorage.setItem("token", token);
+        setUser(result.result.data.user);
+        navigate("/");
+        return;
+      }
+
+      if (res.status === 400) {
+        // bad input
+        setUsernameError(true);
+        return;
+      }
+
+      throw res;
+    } catch (e) {
+      setErrorMessage("Something went wrong! Please try later!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -144,7 +187,6 @@ function SignUp() {
                   </svg>
                 </div>
                 <p className={styles.contentTitle}>Create a Google Account</p>
-                <span>Enter your child’s account information</span>
               </div>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid container spacing={1} rowSpacing={2}>
@@ -156,6 +198,7 @@ function SignUp() {
                       variant="outlined"
                       size="small"
                       {...register("firstName")}
+                      disabled={loading}
                     />
                   </Grid>
                   <Grid item xs={12} md={6}>
@@ -166,6 +209,7 @@ function SignUp() {
                       name="lastName"
                       variant="outlined"
                       {...register("lastName")}
+                      disabled={loading}
                       error={errors.lastName ? true : false}
                       size="small"
                     />
@@ -192,7 +236,8 @@ function SignUp() {
                       label="UserName"
                       variant="outlined"
                       {...register("username")}
-                      error={errors.username ? true : false}
+                      error={errors.username || usernameError}
+                      disabled={loading}
                       size="small"
                       InputProps={{
                         endAdornment: (
@@ -203,9 +248,11 @@ function SignUp() {
                       }}
                     />
                     <div className={styles.gmailNote}>
-                      {errors.username ? (
+                      {errors.username || usernameError ? (
                         <span className={styles.error}>
-                          {errors.username.message}
+                          {usernameError
+                            ? "This username is existing, please try another one"
+                            : errors.username.message}
                         </span>
                       ) : (
                         <span>You can use letters, numbers & periods</span>
@@ -216,8 +263,9 @@ function SignUp() {
                   <Grid item xs={12} md={6}>
                     <TextField
                       fullWidth
-                      error={errors.password || confirm ? true : false}
+                      error={errors.password}
                       {...register("password")}
+                      disabled={loading}
                       label="Password"
                       variant="outlined"
                       size="small"
@@ -230,6 +278,7 @@ function SignUp() {
                       id="outlined-basic"
                       label="Confirm"
                       type={showPassword ? "text" : "password"}
+                      disabled={loading}
                       variant="outlined"
                       size="small"
                       error={!errors.password && errors.confirm ? true : false}
@@ -247,8 +296,10 @@ function SignUp() {
                       </span>
                     ) : (
                       <span>
-                        Use 8 or more characters with a mix of letters, numbers
-                        & symbols
+                        <span>
+                          Use 8 or more characters with a mix of letters,
+                          numbers & symbols
+                        </span>
                       </span>
                     )}
                   </div>
@@ -260,18 +311,24 @@ function SignUp() {
                     />
                     Show Password
                   </label>
+                  <div className={styles.note}>
+                    {errorMessage && (
+                      <span className={styles.error}>{errorMessage}</span>
+                    )}
+                  </div>
                   <div className={styles.registerEnd}>
                     <Link to="/signin" className={styles.highlight}>
                       Sign in instead
                     </Link>
-                    <Button
+                    <LoadingButton
+                      loading={loading}
                       variant="contained"
                       type="submit"
                       style={{ textTransform: "none" }}
                       disabled={loading}
                     >
                       Next
-                    </Button>
+                    </LoadingButton>
                   </div>
                 </Grid>
               </form>

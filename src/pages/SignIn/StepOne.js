@@ -26,16 +26,20 @@ function StepOne({ onNext, email }) {
   });
   const [useNameError, setUseNameError] = useState(false);
   const onSubmit = (data) => {
+    let username = data.email;
+    if (data.email.indexOf("@gmail.com") >= 0) {
+      username = data.email.split("@gmail.com")[0];
+    }
     fetch(
       `${API_URL}/check-username?input=${JSON.stringify({
-        username: data.email,
+        username: username,
       })}`
     )
       .then((response) => response.json())
       .then((result) => {
         if (result.result.data) {
           setUseNameError(false);
-          onNext(data.email);
+          onNext(username);
         } else {
           setUseNameError(true);
         }

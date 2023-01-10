@@ -1,17 +1,19 @@
-import Header from "../../component/Header";
 import styles from "./Home.module.scss";
-import ComposeBtn from "../../component/ComposeBtn";
 
 function Home() {
   return (
-    <div>
-      <Header />
-      <div className={styles.container}>
-        <div className={styles.containerLeft}>
-          <ComposeBtn />
+    <div className={styles.wrapper}>
+      <div className={styles.topbar}>
+        <div>
+          <input type="checkbox" />
         </div>
-        <div className={styles.containerCenter}></div>
-        <div className={styles.containerRight}></div>
+        <div>
+          <span>1-50 of 155</span>
+          <div className={styles.daboard}>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
       </div>
     </div>
   );

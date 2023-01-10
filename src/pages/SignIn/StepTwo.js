@@ -7,9 +7,10 @@ import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants";
+import UserContext from "../../UserContext";
 
 const schema = z.object({
   username: z.string().trim().min(6).max(30),
@@ -37,18 +38,22 @@ function StepTwo({ onBack, username }) {
     setShowPassWord(!showPassword);
   };
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   const onSubmit = async (data) => {
     setErrorMessage("");
     const res = await fetch(`${API_URL}/sign-in`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     });
     if (res.ok) {
       const result = await res.json();
-      console.log("resdata:", result);
       const token = result.result.data.token;
       localStorage.setItem("token", token);
       navigate("/");
+      setUser(result.result.data.user);
     }
     if (res.status === 400) {
       setErrorMessage("Username or password is wrong");
@@ -81,13 +86,13 @@ function StepTwo({ onBack, username }) {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
             className={styles.iconDown}
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M19.5 8.25l-7.5 7.5-7.5-7.5"
             />
           </svg>
