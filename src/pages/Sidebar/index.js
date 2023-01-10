@@ -9,30 +9,30 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import clsx from "clsx";
 import { useState } from "react";
 
-const array = [
+const sidebarItems = [
   {
     path: "/",
-    lable: "Hộp thư đến",
+    lable: "Inbox",
     icon: <InboxIcon className={styles.icon} />,
   },
   {
     path: "/starred",
-    lable: "Có gắn dấu sao",
+    lable: "Starred",
     icon: <StarOutlineIcon className={styles.icon} />,
   },
   {
     path: "/snoozed",
-    lable: "Đã tạm ẩn",
+    lable: "Snoozed",
     icon: <QueryBuilderIcon className={styles.icon} />,
   },
   {
     path: "/sent",
-    lable: "Đã Gửi",
+    lable: "Sent",
     icon: <SendOutlinedIcon className={styles.icon} />,
   },
   {
     path: "/drafts",
-    lable: "Thư nháp",
+    lable: "Drafts",
     icon: <InsertDriveFileOutlinedIcon className={styles.icon} />,
   },
 ];
@@ -40,7 +40,7 @@ function Sidebar({ open }) {
   const location = useLocation();
   return (
     <ul className={open ? styles.SidebarMenu : styles.SidebarMenuZoomOut}>
-      {array.map((item) => {
+      {sidebarItems.map((item) => {
         return (
           <li key={item.path}>
             <Link

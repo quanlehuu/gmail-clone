@@ -4,7 +4,6 @@ import React, { useContext } from "react";
 
 function InboxPage() {
   const data = useContext(UserContext);
-  console.log("C", data);
   return (
     <div className={styles.wrapper}>
       <div className={styles.topbar}>

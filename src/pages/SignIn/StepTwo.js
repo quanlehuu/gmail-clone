@@ -37,7 +37,7 @@ function StepTwo({ onBack, username }) {
     setShowPassWord(!showPassword);
   };
   const navigate = useNavigate();
-  const setUser = useContext(UserContext).setUser;
+  const { setUser } = useContext(UserContext);
   const onSubmit = async (data) => {
     setErrorMessage("");
     const res = await fetch("http://goapi.cc:4000/sign-in", {

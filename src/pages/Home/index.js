@@ -8,7 +8,7 @@ function Home() {
           <input type="checkbox" />
         </div>
         <div>
-          <span>1-50 trong số 155</span>
+          <span>1-50 of 155</span>
           <div className={styles.daboard}>
             <span></span>
             <span></span>

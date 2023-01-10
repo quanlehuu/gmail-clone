@@ -73,6 +73,7 @@ function SignUp() {
   const [usernameError, setUsernameError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
   useEffect(() => {
     if (user) {
       navigate("/");
@@ -101,7 +102,7 @@ function SignUp() {
     setLoading(true);
     setUsernameError(false);
     try {
-      const res = await fetch("http://goapi.cc:4000/sign-up", {
+      const res = await fetch("https://jan4.goapi.cc/sign-up", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -112,6 +113,7 @@ function SignUp() {
         const result = await res.json();
         const token = result.result.data.token;
         localStorage.setItem("token", token);
+        setUser(result.result.data.user);
         navigate("/");
         return;
       }
