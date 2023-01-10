@@ -5,10 +5,11 @@ import { Controller, useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../../UserContext";
 
 const schema = z
   .object({
@@ -66,12 +67,18 @@ const schema = z
   });
 
 function SignUp() {
+  const user = useContext(UserContext).user;
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
+  const { setUser } = useContext(UserContext);
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
   const {
     register,
     handleSubmit,
@@ -95,7 +102,7 @@ function SignUp() {
     setLoading(true);
     setUsernameError(false);
     try {
-      const res = await fetch("http://goapi.cc:4000/sign-up", {
+      const res = await fetch("https://jan4.goapi.cc/sign-up", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -106,6 +113,7 @@ function SignUp() {
         const result = await res.json();
         const token = result.result.data.token;
         localStorage.setItem("token", token);
+        setUser(result.result.data.user);
         navigate("/");
         return;
       }
@@ -118,7 +126,6 @@ function SignUp() {
 
       throw res;
     } catch (e) {
-      console.error(e);
       setErrorMessage("Something went wrong! Please try later!");
     } finally {
       setLoading(false);
