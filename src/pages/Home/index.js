@@ -1,3 +1,4 @@
+import EmailItem from "../../component/EmailItem";
 import styles from "./Home.module.scss";
 
 function Home() {
@@ -9,11 +10,10 @@ function Home() {
         </div>
         <div>
           <span>1-50 of 155</span>
-          <div className={styles.daboard}>
-            <span></span>
-            <span></span>
-          </div>
         </div>
+      </div>
+      <div className={styles.menuEmail}>
+        <EmailItem />
       </div>
     </div>
   );
