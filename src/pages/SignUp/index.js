@@ -7,16 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { API_URL } from "../../constants";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../../UserContext";
 
 const schema = z
   .object({
-    firstName: z
-      .string() // invalid_type
-      .trim()
-      .min(1, { message: "Enter first name" }), // too_small
+    firstName: z.string().trim().min(1, { message: "Enter first name" }),
     lastName: z.string().trim().min(1, { message: "Enter last name" }),
     username: z
       .string()
@@ -102,7 +100,7 @@ function SignUp() {
     setLoading(true);
     setUsernameError(false);
     try {
-      const res = await fetch("https://jan4.goapi.cc/sign-up", {
+      const res = await fetch(`${API_URL}/sign-up`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

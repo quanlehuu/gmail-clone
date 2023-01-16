@@ -1,0 +1,60 @@
+.inputBtn {
+  width: 100%;
+  outline: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  text-align: left;
+  background-color: white;
+  color: #757575;
+  & input {
+    width: 91%;
+    outline: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: none;
+    font-size: 14px;
+    border-bottom: 1px solid #cfcfcf;
+  }
+}
+.inputBtn1 {
+  width: 10%;
+  outline: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  text-align: left;
+  background-color: white;
+  color: #444746;
+}
+.inputHide {
+  width: 0;
+  outline: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: none;
+  font-size: 14px;
+  border-bottom: 1px solid #cfcfcf;
+}
+.inputSpecial {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  color: #444746;
+  font-size: 14px;
+  height: 36px;
+}
+.inputBtnFocus {
+  width: 91%;
+  outline: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: none;
+  font-size: 14px;
+  border-bottom: 1px solid #cfcfcf;
+}
