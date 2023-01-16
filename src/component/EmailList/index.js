@@ -1,6 +1,9 @@
 import { useState } from "react";
 import EmailItem from "../EmailItem";
 import styles from "./EmailList.module.scss";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import clsx from "clsx";
 
 const menuArr = [
   {
@@ -55,12 +58,83 @@ const menuArr = [
     thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
     Time: "09:12",
   },
+  {
+    id: 7,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
+  {
+    id: 8,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
+  {
+    id: 9,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
+  {
+    id: 10,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
+  {
+    id: 11,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
+  {
+    id: 12,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
+  {
+    id: 13,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
+  {
+    id: 14,
+    Name: "Lehuuquan",
+    Title: "Bạn có hài lòng với công việc hiện tại không?",
+    Content: `Tham gia khảo sát, có ngay cơ hội nhận phần quà là tiền mặt 200K Bạn
+    thân mến, JobsGO xin cảm ơn bạn đã đồng hành cùng JobsGO trong suốt
+    thời gian vừa qua. Là một đơn vị uy tín trong lĩnh vực tuyển`,
+    Time: "09:12",
+  },
 ];
 
 function EmailList() {
-  const [check, setCheck] = useState(false);
   const [checkedItems, setCheckedItems] = useState([]);
-  const [checkAll, setCheckAll] = useState(false);
+  const [moreEmail, setMoreImail] = useState(false);
 
   const handleCheckAll = () => {
     if (menuArr.length === checkedItems.length) {
@@ -79,26 +153,91 @@ function EmailList() {
             onChange={handleCheckAll}
           />
         </div>
-        <div>
+        <div className={styles.dashbroadEmail}>
           <span>1-50 of 155</span>
+          <div className={styles.dashbroadEmailItem}>
+            <button className={styles.icon} onClick={() => setMoreImail(false)}>
+              <ChevronLeftIcon
+                className={clsx(styles.iconLeft, !moreEmail && styles.active)}
+              />
+            </button>
+            <button className={styles.icon} onClick={() => setMoreImail(true)}>
+              <ChevronRightIcon
+                className={clsx(styles.iconRight, moreEmail && styles.active)}
+              />
+            </button>
+          </div>
         </div>
       </div>
-      {menuArr.map((item) => {
-        return (
-          <EmailItem
-            item={item}
-            key={item.id}
-            checked={checkedItems.includes(item.id)}
-            onCheck={() => {
-              if (checkedItems.includes(item.id)) {
-                setCheckedItems(checkedItems.filter((id) => id !== item.id));
-              } else {
-                setCheckedItems([...checkedItems, item.id]);
-              }
-            }}
-          />
-        );
-      })}
+      {moreEmail ? (
+        <div className={styles.emailList}>
+          {menuArr
+            .filter((item) => item.id > 10)
+            .map((item) => {
+              return (
+                <EmailItem
+                  item={item}
+                  key={item.id}
+                  checked={checkedItems.includes(item.id)}
+                  onCheck={() => {
+                    if (checkedItems.includes(item.id)) {
+                      setCheckedItems(
+                        checkedItems.filter((id) => id !== item.id)
+                      );
+                    } else {
+                      setCheckedItems([...checkedItems, item.id]);
+                    }
+                  }}
+                />
+              );
+            })}
+        </div>
+      ) : (
+        <div className={styles.emailList}>
+          {menuArr
+            .filter((item) => item.id <= 10)
+            .map((item) => {
+              return (
+                <EmailItem
+                  item={item}
+                  key={item.id}
+                  checked={checkedItems.includes(item.id)}
+                  onCheck={() => {
+                    if (checkedItems.includes(item.id)) {
+                      setCheckedItems(
+                        checkedItems.filter((id) => id !== item.id)
+                      );
+                    } else {
+                      setCheckedItems([...checkedItems, item.id]);
+                    }
+                  }}
+                />
+              );
+            })}
+        </div>
+      )}
+      {/* <div className={styles.emailList}>
+        {menuArr
+          .filter((item) => item.id <= 50)
+          .map((item) => {
+            return (
+              <EmailItem
+                item={item}
+                key={item.id}
+                checked={checkedItems.includes(item.id)}
+                onCheck={() => {
+                  if (checkedItems.includes(item.id)) {
+                    setCheckedItems(
+                      checkedItems.filter((id) => id !== item.id)
+                    );
+                  } else {
+                    setCheckedItems([...checkedItems, item.id]);
+                  }
+                }}
+              />
+            );
+          })}
+      </div> */}
     </>
   );
 }
