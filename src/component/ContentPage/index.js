@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Sidebar from "../../pages/Sidebar";
+import ComposeBtn from "../ComposeBtn";
 import Header from "../Header";
 import styles from "./ContentPage.module.scss";
 
@@ -13,6 +14,7 @@ function ContentPage({ children }) {
       <Header onToggleSidebarClick={handleToggleSidebar} />
       <div className={styles.wrapper}>
         <div className={styles.sidebar}>
+          <ComposeBtn />
           <Sidebar open={open} />
         </div>
         <div className={styles.container}>{children}</div>

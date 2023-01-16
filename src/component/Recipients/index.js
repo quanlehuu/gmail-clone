@@ -7,7 +7,7 @@ import { z } from "zod";
 
 const schema = z.object({
   to: z
-    .string() // invalid_type
+    .string()
     .trim()
     .min(1, { message: "Please specify at least one recipient." }),
 });
@@ -34,7 +34,7 @@ function Recipient() {
         onClick={handleFocus}
         type="button"
       >
-        {focus ? "Đến" : to ? to : "Người nhận"}
+        {focus ? "To" : to ? to : "Recipients"}
       </button>
       <Controller
         control={control}

@@ -1,4 +1,4 @@
-import styles from "./ModelCompose.module.scss";
+import styles from "./ComposeModal.module.scss";
 import CloseIcon from "../../assets/Icon/CloseIcon";
 import MinusIcon from "../../assets/Icon/MinusIcon";
 import ZoomIcon from "../../assets/Icon/ZoomIcon";
@@ -12,21 +12,18 @@ import { z } from "zod";
 
 const schema = z.object({
   to: z
-    .string() // invalid_type
+    .string()
     .trim()
     .min(1, { message: "Please specify at least one recipient." })
     .email({
       message: `The address in the field was not recognized. Please make sure that all addresses are properly formed.`,
     }),
-  subject: z
-    .string() // invalid_type
-    .trim()
-    .min(1, { message: "Please enter subject." }),
+  subject: z.string().trim().min(1, { message: "Please enter subject." }),
 });
 
 const token = localStorage.getItem("token");
 
-function ModelCompose({ setCompose }) {
+function ComposeModal({ setCompose }) {
   const [zoom, setZoom] = useState(false);
   const [zoomOut, setZoomOut] = useState(false);
   const methods = useForm({
@@ -61,9 +58,7 @@ function ModelCompose({ setCompose }) {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("Success:", data);
             if (data.result) {
-              console.log(id);
               setId(data.result.data.id);
             }
           });
@@ -74,9 +69,7 @@ function ModelCompose({ setCompose }) {
   }, [watch, id]);
 
   const onSubmit = (data) => {
-    console.log(data);
     const validation = schema.safeParse(data);
-    console.log("validation", validation);
     if (validation.error) {
       alert(validation.error.issues[0].message);
       return;
@@ -95,9 +88,7 @@ function ModelCompose({ setCompose }) {
       }),
     })
       .then((response) => response.json())
-      .then((result) => {
-        console.log("Success:", result);
-      });
+      .then((result) => {});
   };
   const handleClose = () => {
     setCompose(false);
@@ -119,7 +110,7 @@ function ModelCompose({ setCompose }) {
         <div className={styles.zoomOut}>
           <div className={styles.zoomOutItem}>
             <button className={styles.outLineBtn} onClick={handleZoomOut}>
-              <span>Thư mới</span>
+              <span>New Message</span>
             </button>
             <div className={styles.dashboardZoomOut}>
               <button className={styles.buttonIcon} onClick={handleZoomOut}>
@@ -137,7 +128,7 @@ function ModelCompose({ setCompose }) {
       ) : (
         <div className={zoom ? styles.zoomMail : styles.newMail}>
           <div className={styles.newMailTitle}>
-            <span>Thư mới</span>
+            <span>New Message</span>
             <div className={styles.dashboard}>
               <button className={styles.buttonIcon} onClick={handleZoomOut}>
                 <MinusIcon />
@@ -159,7 +150,7 @@ function ModelCompose({ setCompose }) {
               <input
                 className={styles.inputBtn}
                 type="text"
-                placeholder="Tiêu đề"
+                placeholder="Subject"
                 {...register("subject")}
               />
               <textarea
@@ -182,4 +173,4 @@ function ModelCompose({ setCompose }) {
   );
 }
 
-export default ModelCompose;
+export default ComposeModal;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PencilIcon from "../../assets/Icon/PencilIcon";
-import ModelCompose from "../ModelCompose";
+import ComposeModal from "../ComposeModal";
 import styles from "./ComposeBtn.module.scss";
 
 function ComposeBtn() {
@@ -14,7 +14,7 @@ function ComposeBtn() {
         <PencilIcon />
         Compose
       </button>
-      {compose && <ModelCompose setCompose={setCompose} />}
+      {compose && <ComposeModal setCompose={setCompose} />}
     </div>
   );
 }

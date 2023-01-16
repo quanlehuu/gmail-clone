@@ -14,10 +14,7 @@ import UserContext from "../../UserContext";
 
 const schema = z.object({
   username: z.string().trim().min(6).max(30),
-  password: z
-    .string() // invalid_type
-    .trim()
-    .min(1, { message: "Enter a password" }),
+  password: z.string().trim().min(1, { message: "Enter a password" }),
 });
 function StepTwo({ onBack, username }) {
   const {

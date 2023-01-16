@@ -14,10 +14,7 @@ import UserContext from "../../UserContext";
 
 const schema = z
   .object({
-    firstName: z
-      .string() // invalid_type
-      .trim()
-      .min(1, { message: "Enter first name" }), // too_small
+    firstName: z.string().trim().min(1, { message: "Enter first name" }),
     lastName: z.string().trim().min(1, { message: "Enter last name" }),
     username: z
       .string()
