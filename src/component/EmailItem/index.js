@@ -7,9 +7,12 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import clsx from "clsx";
 import { API_URL } from "../../constants";
 
-function EmailItem({ item, checked, onStar, onCheck }) {
+function EmailItem({ item, checked, onStar, onCheck, onShowDetail }) {
   return (
-    <div className={clsx(styles.emailItem, checked && styles.active)}>
+    <div
+      className={clsx(styles.emailItem, checked && styles.active)}
+      onClick={() => onShowDetail()}
+    >
       <div className={clsx(styles.checkbox, checked && styles.active)}>
         <input
           type="checkbox"
