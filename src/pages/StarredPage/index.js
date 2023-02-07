@@ -1,12 +1,11 @@
+import EmailList from "../../component/EmailList";
+import EmailStarred from "../../component/EmailStarred";
 import styles from "./StarredPage.module.scss";
 
 function StarredPage() {
   return (
     <div className={styles.wrapper}>
-      <div className={styles.topbar}>
-        this is StarredPage
-        <div></div>
-      </div>
+      <EmailStarred />
     </div>
   );
 }

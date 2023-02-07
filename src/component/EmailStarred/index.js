@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EmailItem from "../EmailItem";
-import styles from "./EmailList.module.scss";
+import styles from "./EmailStarred.module.scss";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import clsx from "clsx";
@@ -9,18 +9,16 @@ import { API_URL } from "../../constants";
 
 const token = localStorage.getItem("token");
 
-function EmailList() {
+function EmailStarred() {
   const [checkedItems, setCheckedItems] = useState([]);
+  const [checkedStar, setCheckedStar] = useState([]);
   const [emailList, setEmailList] = useState([]);
   const [data, setData] = useState({});
   const [page, setPage] = useState(1);
   useEffect(() => {
-    fetch(
-      `${API_URL}/get-inbox?input=${JSON.stringify({
-        page: page,
-      })}`,
-      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-    )
+    fetch(`${API_URL}/get-starred`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -44,13 +42,16 @@ function EmailList() {
     }
   };
   const handleBack = () => {
-    setPage(page - 1);
+    if (page !== 1) {
+      setPage(page - 1);
+    }
   };
   const handleStar = async (index) => {
     const newEmail = { ...emailList[index] };
-    newEmail.starred = !emailList.starred;
-    const newEmailList = [...emailList];
-    newEmailList[index] = newEmail;
+    const newEmailList = emailList.filter(
+      (item) => item.email.id !== newEmail.email.id
+    );
+    // newEmailList[index] = newEmail;
     setEmailList(newEmailList);
 
     fetch(`${API_URL}/toggle-star-email`, {
@@ -109,7 +110,7 @@ function EmailList() {
               item={item}
               key={item.email.id}
               checked={
-                checkedItems.includes(item.email.id) === undefined
+                checkedItems === []
                   ? false
                   : checkedItems.includes(item.email.id)
               }
@@ -131,4 +132,4 @@ function EmailList() {
   );
 }
 
-export default EmailList;
+export default EmailStarred;

@@ -1,70 +1,48 @@
 import { useState } from "react";
 import EmailItem from "../EmailItem";
-import styles from "./EmailList.module.scss";
+import styles from "./EmailStarred.module.scss";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import clsx from "clsx";
 import { useEffect } from "react";
 import { API_URL } from "../../constants";
 
-const token = localStorage.getItem("token");
-
-function EmailList() {
+function EmailStarred() {
   const [checkedItems, setCheckedItems] = useState([]);
-  const [emailList, setEmailList] = useState([]);
+  const [showEmail, setShowEmail] = useState([]);
   const [data, setData] = useState({});
   const [page, setPage] = useState(1);
   useEffect(() => {
-    fetch(
-      `${API_URL}/get-inbox?input=${JSON.stringify({
-        page: page,
-      })}`,
-      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-    )
+    fetch(`${API_URL}/get-starred`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
         }
       })
       .then((data) => {
-        setEmailList(data.result.data.data);
+        console.log(data);
+        setShowEmail(data.result.data.data);
         setData(data.result.data);
       });
-  }, [setEmailList]);
+  }, [setShowEmail]);
   const handleCheckAll = () => {
-    if (emailList.length === checkedItems.length) {
+    if (showEmail.length === checkedItems.length) {
       setCheckedItems([]);
       return;
     }
-    setCheckedItems(emailList.map((item) => item.email.id));
+    setCheckedItems(showEmail.map((item) => item.email.id));
   };
   const handleNext = () => {
-    if (emailList.length + (page - 1) * 50 < data.total) {
+    if (showEmail.length + (page - 1) * 50 < data.total) {
       setPage(page + 1);
     }
   };
   const handleBack = () => {
-    setPage(page - 1);
-  };
-  const handleStar = async (index) => {
-    const newEmail = { ...emailList[index] };
-    newEmail.starred = !emailList.starred;
-    const newEmailList = [...emailList];
-    newEmailList[index] = newEmail;
-    setEmailList(newEmailList);
-
-    fetch(`${API_URL}/toggle-star-email`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        id: newEmail.email.id,
-      }),
-    })
-      .then((response) => response.json())
-      .then((result) => {});
+    if (page !== 1) {
+      setPage(page - 1);
+    }
   };
   return (
     <>
@@ -72,13 +50,13 @@ function EmailList() {
         <div>
           <input
             type="checkbox"
-            checked={checkedItems.length === emailList.length}
+            checked={checkedItems.length === showEmail.length}
             onChange={handleCheckAll}
           />
         </div>
         <div className={styles.dashbroadEmail}>
           <span>
-            1-{emailList.length} of {data.total}
+            1-{showEmail.length} of {data.total}
           </span>
           <div className={styles.dashbroadEmailItem}>
             <button className={styles.icon} onClick={handleBack}>
@@ -91,7 +69,7 @@ function EmailList() {
               )}
             </button>
             <button className={styles.icon} onClick={handleNext}>
-              {emailList.length + (page - 1) * 50 < data.total ? (
+              {showEmail.length + (page - 1) * 50 < data.total ? (
                 <ChevronRightIcon
                   className={clsx(styles.iconRight, styles.active)}
                 />
@@ -103,17 +81,12 @@ function EmailList() {
         </div>
       </div>
       <div className={styles.emailList}>
-        {emailList.map((item, index) => {
+        {showEmail.map((item) => {
           return (
             <EmailItem
               item={item}
               key={item.email.id}
-              checked={
-                checkedItems.includes(item.email.id) === undefined
-                  ? false
-                  : checkedItems.includes(item.email.id)
-              }
-              onStar={() => handleStar(index)}
+              checked={checkedItems.includes(item.email.id)}
               onCheck={() => {
                 if (checkedItems.includes(item.email.id)) {
                   setCheckedItems(
@@ -131,4 +104,4 @@ function EmailList() {
   );
 }
 
-export default EmailList;
+export default EmailStarred;

@@ -6,6 +6,7 @@
   background-color: white;
   display: flex;
   flex-direction: column;
+  z-index: 99;
   position: fixed;
   bottom: 0;
   right: 60px;
@@ -27,6 +28,7 @@
   min-height: 80%;
   border-radius: 8px 8px 0 0;
   background-color: white;
+  z-index: 99;
   opacity: none;
   border-radius: 8px;
   z-index: 99;

@@ -7,13 +7,14 @@ import { UserProvider } from "./UserContext";
 import { useEffect } from "react";
 import { useState } from "react";
 import PrivatePage from "./component/PrivatePage";
+import { API_URL } from "./constants";
 
 function App() {
   const [user, setUser] = useState();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(true);
-    fetch("https://jan4.goapi.cc/me", {
+    fetch(`${API_URL}/me`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     })
       .then((response) => {
