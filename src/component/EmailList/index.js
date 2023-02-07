@@ -78,10 +78,15 @@ function EmailList() {
         </div>
         <div className={styles.dashbroadEmail}>
           <span>
-            1-{emailList.length} of {data.total}
+            {(page - 1) * 50 + 1} - {(page - 1) * 50 + emailList.length} of{" "}
+            {data.total}
           </span>
           <div className={styles.dashbroadEmailItem}>
-            <button className={styles.icon} onClick={handleBack}>
+            <button
+              className={styles.icon}
+              onClick={handleBack}
+              disabled={page === 1}
+            >
               {page > 1 ? (
                 <ChevronLeftIcon
                   className={clsx(styles.iconLeft, styles.active)}
@@ -90,7 +95,11 @@ function EmailList() {
                 <ChevronLeftIcon className={styles.iconLeft} />
               )}
             </button>
-            <button className={styles.icon} onClick={handleNext}>
+            <button
+              className={styles.icon}
+              onClick={handleNext}
+              disabled={emailList.length + (page - 1) * 50 === data.total}
+            >
               {emailList.length + (page - 1) * 50 < data.total ? (
                 <ChevronRightIcon
                   className={clsx(styles.iconRight, styles.active)}
@@ -108,11 +117,7 @@ function EmailList() {
             <EmailItem
               item={item}
               key={item.email.id}
-              checked={
-                checkedItems.includes(item.email.id) === undefined
-                  ? false
-                  : checkedItems.includes(item.email.id)
-              }
+              checked={checkedItems.includes(item.email.id)}
               onStar={() => handleStar(index)}
               onCheck={() => {
                 if (checkedItems.includes(item.email.id)) {

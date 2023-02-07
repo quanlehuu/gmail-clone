@@ -11,7 +11,6 @@ const token = localStorage.getItem("token");
 
 function EmailStarred() {
   const [checkedItems, setCheckedItems] = useState([]);
-  const [checkedStar, setCheckedStar] = useState([]);
   const [emailList, setEmailList] = useState([]);
   const [data, setData] = useState({});
   const [page, setPage] = useState(1);
@@ -47,9 +46,9 @@ function EmailStarred() {
     }
   };
   const handleStar = async (index) => {
-    const newEmail = { ...emailList[index] };
+    const email = emailList[index];
     const newEmailList = emailList.filter(
-      (item) => item.email.id !== newEmail.email.id
+      (item) => item.email.id !== email.email.id
     );
     // newEmailList[index] = newEmail;
     setEmailList(newEmailList);
@@ -61,7 +60,7 @@ function EmailStarred() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id: newEmail.email.id,
+        id: email.email.id,
       }),
     })
       .then((response) => response.json())
@@ -79,7 +78,8 @@ function EmailStarred() {
         </div>
         <div className={styles.dashbroadEmail}>
           <span>
-            1-{emailList.length} of {data.total}
+            {(page - 1) * 50 + 1} - {(page - 1) * 50 + emailList.length} of{" "}
+            {data.total}
           </span>
           <div className={styles.dashbroadEmailItem}>
             <button className={styles.icon} onClick={handleBack}>
@@ -109,11 +109,7 @@ function EmailStarred() {
             <EmailItem
               item={item}
               key={item.email.id}
-              checked={
-                checkedItems === []
-                  ? false
-                  : checkedItems.includes(item.email.id)
-              }
+              checked={checkedItems.includes(item.email.id)}
               onStar={() => handleStar(index)}
               onCheck={() => {
                 if (checkedItems.includes(item.email.id)) {
