@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EmailItem from "../EmailItem";
-import styles from "./EmailStarred.module.scss";
+import styles from "./StarredEmailList.module.scss";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import clsx from "clsx";
@@ -14,9 +14,8 @@ import EmailDetail from "../EmailDetail";
 
 const token = localStorage.getItem("token");
 
-function EmailStarred() {
+function StarredEmailList() {
   const [checkedItems, setCheckedItems] = useState([]);
-  const [checkedStar, setCheckedStar] = useState([]);
   const [emailList, setEmailList] = useState([]);
   const [data, setData] = useState({});
   const [page, setPage] = useState(1);
@@ -59,9 +58,9 @@ function EmailStarred() {
   };
   const handleStar = async (index) => {
     setShowEmailDetail(false);
-    const newEmail = { ...emailList[index] };
+    const email = emailList[index];
     const newEmailList = emailList.filter(
-      (item) => item.email.id !== newEmail.email.id
+      (item) => item.email.id !== email.email.id
     );
     // newEmailList[index] = newEmail;
     setEmailList(newEmailList);
@@ -73,7 +72,7 @@ function EmailStarred() {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id: newEmail.email.id,
+        id: email.email.id,
       }),
     })
       .then((response) => response.json())
@@ -100,31 +99,6 @@ function EmailStarred() {
               <MoreVertIcon className={styles.iconItem} />
             </button>
           </div>
-          <div className={styles.dashbroadEmail}>
-            <span>
-              1-{emailList.length} of {data.total}
-            </span>
-            <div className={styles.dashbroadEmailItem}>
-              <button className={styles.icon} onClick={handleBack}>
-                {page > 1 ? (
-                  <ChevronLeftIcon
-                    className={clsx(styles.iconLeft, styles.active)}
-                  />
-                ) : (
-                  <ChevronLeftIcon className={styles.iconLeft} />
-                )}
-              </button>
-              <button className={styles.icon} onClick={handleNext}>
-                {emailList.length + (page - 1) * 50 < data.total ? (
-                  <ChevronRightIcon
-                    className={clsx(styles.iconRight, styles.active)}
-                  />
-                ) : (
-                  <ChevronRightIcon className={styles.iconRight} />
-                )}
-              </button>
-            </div>
-          </div>
         </div>
       ) : (
         <div className={styles.topbar}>
@@ -137,27 +111,49 @@ function EmailStarred() {
           </div>
           <div className={styles.dashbroadEmail}>
             <span>
-              1-{emailList.length} of {data.total}
+              {(page - 1) * 50 + 1} - {(page - 1) * 50 + emailList.length} of{" "}
+              {data.total}
             </span>
             <div className={styles.dashbroadEmailItem}>
-              <button className={styles.icon} onClick={handleBack}>
-                {page > 1 ? (
-                  <ChevronLeftIcon
-                    className={clsx(styles.iconLeft, styles.active)}
-                  />
-                ) : (
-                  <ChevronLeftIcon className={styles.iconLeft} />
-                )}
+              <button
+                className={styles.icon}
+                onClick={handleBack}
+                disabled={page === 1}
+              >
+                <ChevronLeftIcon className={clsx(styles.iconLeft)} />
               </button>
-              <button className={styles.icon} onClick={handleNext}>
-                {emailList.length + (page - 1) * 50 < data.total ? (
-                  <ChevronRightIcon
-                    className={clsx(styles.iconRight, styles.active)}
-                  />
-                ) : (
-                  <ChevronRightIcon className={styles.iconRight} />
-                )}
+              <button
+                className={styles.icon}
+                onClick={handleNext}
+                disabled={emailList.length + (page - 1) * 50 === data.total}
+              >
+                <ChevronRightIcon className={clsx(styles.iconRight)} />
               </button>
+            </div>
+            <div className={styles.dashbroadEmail}>
+              <span>
+                1-{emailList.length} of {data.total}
+              </span>
+              <div className={styles.dashbroadEmailItem}>
+                <button className={styles.icon} onClick={handleBack}>
+                  {page > 1 ? (
+                    <ChevronLeftIcon
+                      className={clsx(styles.iconLeft, styles.active)}
+                    />
+                  ) : (
+                    <ChevronLeftIcon className={styles.iconLeft} />
+                  )}
+                </button>
+                <button className={styles.icon} onClick={handleNext}>
+                  {emailList.length + (page - 1) * 50 < data.total ? (
+                    <ChevronRightIcon
+                      className={clsx(styles.iconRight, styles.active)}
+                    />
+                  ) : (
+                    <ChevronRightIcon className={styles.iconRight} />
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -194,4 +190,4 @@ function EmailStarred() {
   );
 }
 
-export default EmailStarred;
+export default StarredEmailList;
