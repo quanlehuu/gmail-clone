@@ -11,7 +11,7 @@ const token = localStorage.getItem("token");
 
 function InboxEmailList() {
   const [checkedItems, setCheckedItems] = useState([]);
-  const [InboxEmailList, setInboxEmailList] = useState([]);
+  const [emailList, setEmailList] = useState([]);
   const [data, setData] = useState({});
   const [page, setPage] = useState(1);
   useEffect(() => {
@@ -27,19 +27,19 @@ function InboxEmailList() {
         }
       })
       .then((data) => {
-        setInboxEmailList(data.result.data.data);
+        setEmailList(data.result.data.data);
         setData(data.result.data);
       });
-  }, [setInboxEmailList]);
+  }, [setEmailList]);
   const handleCheckAll = () => {
-    if (InboxEmailList.length === checkedItems.length) {
+    if (emailList.length === checkedItems.length) {
       setCheckedItems([]);
       return;
     }
-    setCheckedItems(InboxEmailList.map((item) => item.email.id));
+    setCheckedItems(emailList.map((item) => item.email.id));
   };
   const handleNext = () => {
-    if (InboxEmailList.length + (page - 1) * 50 < data.total) {
+    if (emailList.length + (page - 1) * 50 < data.total) {
       setPage(page + 1);
     }
   };
@@ -47,11 +47,11 @@ function InboxEmailList() {
     setPage(page - 1);
   };
   const handleStar = async (index) => {
-    const newEmail = { ...InboxEmailList[index] };
-    newEmail.starred = !InboxEmailList.starred;
-    const newEmailList = [...InboxEmailList];
+    const newEmail = { ...emailList[index] };
+    newEmail.starred = !emailList.starred;
+    const newEmailList = [...emailList];
     newEmailList[index] = newEmail;
-    setInboxEmailList(newEmailList);
+    setEmailList(newEmailList);
 
     fetch(`${API_URL}/toggle-star-email`, {
       method: "POST",
@@ -72,13 +72,13 @@ function InboxEmailList() {
         <div>
           <input
             type="checkbox"
-            checked={checkedItems.length === InboxEmailList.length}
+            checked={checkedItems.length === emailList.length}
             onChange={handleCheckAll}
           />
         </div>
         <div className={styles.dashbroadEmail}>
           <span>
-            {(page - 1) * 50 + 1} - {(page - 1) * 50 + InboxEmailList.length} of{" "}
+            {(page - 1) * 50 + 1} - {(page - 1) * 50 + emailList.length} of{" "}
             {data.total}
           </span>
           <div className={styles.dashbroadEmailItem}>
@@ -92,7 +92,7 @@ function InboxEmailList() {
             <button
               className={styles.icon}
               onClick={handleNext}
-              disabled={InboxEmailList.length + (page - 1) * 50 === data.total}
+              disabled={emailList.length + (page - 1) * 50 === data.total}
             >
               <ChevronRightIcon className={clsx(styles.iconRight)} />
             </button>
@@ -100,7 +100,7 @@ function InboxEmailList() {
         </div>
       </div>
       <div className={styles.emailList}>
-        {InboxEmailList.map((item, index) => {
+        {emailList.map((item, index) => {
           return (
             <EmailItem
               item={item}

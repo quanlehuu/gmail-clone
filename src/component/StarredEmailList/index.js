@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EmailItem from "../EmailItem";
-import styles from "./EmailStarred.module.scss";
+import styles from "./StarredEmailList.module.scss";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import clsx from "clsx";
@@ -9,9 +9,9 @@ import { API_URL } from "../../constants";
 
 const token = localStorage.getItem("token");
 
-function EmailStarred() {
+function StarredEmailList() {
   const [checkedItems, setCheckedItems] = useState([]);
-  const [InboxEmailList, setInboxEmailList] = useState([]);
+  const [emailList, setEmailList] = useState([]);
   const [data, setData] = useState({});
   const [page, setPage] = useState(1);
   useEffect(() => {
@@ -24,19 +24,19 @@ function EmailStarred() {
         }
       })
       .then((data) => {
-        setInboxEmailList(data.result.data.data);
+        setEmailList(data.result.data.data);
         setData(data.result.data);
       });
-  }, [setInboxEmailList]);
+  }, [setEmailList]);
   const handleCheckAll = () => {
-    if (InboxEmailList.length === checkedItems.length) {
+    if (emailList.length === checkedItems.length) {
       setCheckedItems([]);
       return;
     }
-    setCheckedItems(InboxEmailList.map((item) => item.email.id));
+    setCheckedItems(emailList.map((item) => item.email.id));
   };
   const handleNext = () => {
-    if (InboxEmailList.length + (page - 1) * 50 < data.total) {
+    if (emailList.length + (page - 1) * 50 < data.total) {
       setPage(page + 1);
     }
   };
@@ -46,12 +46,12 @@ function EmailStarred() {
     }
   };
   const handleStar = async (index) => {
-    const email = InboxEmailList[index];
-    const newEmailList = InboxEmailList.filter(
+    const email = emailList[index];
+    const newEmailList = emailList.filter(
       (item) => item.email.id !== email.email.id
     );
     // newEmailList[index] = newEmail;
-    setInboxEmailList(newEmailList);
+    setEmailList(newEmailList);
 
     fetch(`${API_URL}/toggle-star-email`, {
       method: "POST",
@@ -72,13 +72,13 @@ function EmailStarred() {
         <div>
           <input
             type="checkbox"
-            checked={checkedItems.length === InboxEmailList.length}
+            checked={checkedItems.length === emailList.length}
             onChange={handleCheckAll}
           />
         </div>
         <div className={styles.dashbroadEmail}>
           <span>
-            {(page - 1) * 50 + 1} - {(page - 1) * 50 + InboxEmailList.length} of{" "}
+            {(page - 1) * 50 + 1} - {(page - 1) * 50 + emailList.length} of{" "}
             {data.total}
           </span>
           <div className={styles.dashbroadEmailItem}>
@@ -92,7 +92,7 @@ function EmailStarred() {
             <button
               className={styles.icon}
               onClick={handleNext}
-              disabled={InboxEmailList.length + (page - 1) * 50 === data.total}
+              disabled={emailList.length + (page - 1) * 50 === data.total}
             >
               <ChevronRightIcon className={clsx(styles.iconRight)} />
             </button>
@@ -100,7 +100,7 @@ function EmailStarred() {
         </div>
       </div>
       <div className={styles.emailList}>
-        {InboxEmailList.map((item, index) => {
+        {emailList.map((item, index) => {
           return (
             <EmailItem
               item={item}
@@ -124,4 +124,4 @@ function EmailStarred() {
   );
 }
 
-export default EmailStarred;
+export default StarredEmailList;
