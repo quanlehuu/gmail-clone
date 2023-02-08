@@ -33,7 +33,7 @@ function ComposeModal({ setCompose }) {
       subject: "",
     },
   });
-  const { register, watch, handleSubmit } = methods;
+  const { register, reset, watch, handleSubmit } = methods;
   const watchAllFields = watch();
   const [id, setId] = useState();
   useEffect(() => {
@@ -88,7 +88,11 @@ function ComposeModal({ setCompose }) {
       }),
     })
       .then((response) => response.json())
-      .then((result) => {});
+      .then((result) => {
+        // setCompose(false);
+        alert("Submitted successfully");
+      });
+    reset();
   };
   const handleClose = () => {
     setCompose(false);

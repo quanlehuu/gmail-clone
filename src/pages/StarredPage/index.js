@@ -1,12 +1,10 @@
+import StarredEmailList from "../../component/StarredEmailList";
 import styles from "./StarredPage.module.scss";
 
 function StarredPage() {
   return (
     <div className={styles.wrapper}>
-      <div className={styles.topbar}>
-        this is StarredPage
-        <div></div>
-      </div>
+      <StarredEmailList />
     </div>
   );
 }
