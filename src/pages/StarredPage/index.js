@@ -1,4 +1,3 @@
-import EmailList from "../../component/EmailList";
 import EmailStarred from "../../component/EmailStarred";
 import styles from "./StarredPage.module.scss";
 

@@ -17,23 +17,42 @@
   align-items: center;
   justify-content: center;
 }
-.iconLeft:disabled {
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  background-color: white;
-  color: black;
-}
-.iconRight:disabled {
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  background-color: white;
-  color: black;
-}
 .icon {
   border: none;
   padding: 0;
+  cursor: pointer;
+  .iconLeft {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    background-color: white;
+    color: black;
+  }
+  .iconRight {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    background-color: white;
+    color: black;
+  }
+}
+.icon:disabled {
+  border: none;
+  padding: 0;
+  .iconLeft {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    background-color: white;
+    color: #b8b8b8;
+  }
+  .iconRight {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    background-color: white;
+    color: #b8b8b8;
+  }
 }
 .emailList {
   height: 80vh;

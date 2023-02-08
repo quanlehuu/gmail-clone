@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EmailItem from "../EmailItem";
-import styles from "./EmailList.module.scss";
+import styles from "./InboxEmailList.module.scss";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import clsx from "clsx";
@@ -9,7 +9,7 @@ import { API_URL } from "../../constants";
 
 const token = localStorage.getItem("token");
 
-function EmailList() {
+function InboxEmailList() {
   const [checkedItems, setCheckedItems] = useState([]);
   const [InboxEmailList, setInboxEmailList] = useState([]);
   const [data, setData] = useState({});
@@ -124,4 +124,4 @@ function EmailList() {
   );
 }
 
-export default EmailList;
+export default InboxEmailList;
