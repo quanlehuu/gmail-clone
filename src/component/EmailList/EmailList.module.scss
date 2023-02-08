@@ -17,19 +17,19 @@
   align-items: center;
   justify-content: center;
 }
-.iconLeft {
+.iconLeft:disabled {
   display: flex;
   align-items: center;
   font-size: 20px;
   background-color: white;
-  color: #afb0b0;
+  color: black;
 }
-.iconRight {
+.iconRight:disabled {
   display: flex;
   align-items: center;
   font-size: 20px;
   background-color: white;
-  color: #afb0b0;
+  color: black;
 }
 .icon {
   border: none;
@@ -42,4 +42,28 @@
 .active {
   color: black;
   cursor: pointer;
+}
+.dashbroadIcon {
+  display: flex;
+}
+.detailIcon {
+  padding: 0 10px 0 0;
+  display: flex;
+  background-color: white;
+  border: none;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 99px;
+  &:first-child {
+    margin-right: 10px;
+  }
+  .iconItem {
+    font-size: 16px;
+    color: #454847;
+  }
+}
+.detailIcon:hover {
+  background-color: rgba(32, 33, 36, 0.059);
+  border: none;
 }
