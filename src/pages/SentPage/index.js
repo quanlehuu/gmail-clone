@@ -1,9 +1,10 @@
+import SentEmailList from "../../component/SentEmailList";
 import styles from "./SentPage.module.scss";
 function SentPage() {
   return (
     <div className={styles.wrapper}>
       <div className={styles.topbar}>
-        this is Sent Page
+        <SentEmailList />
         <div></div>
       </div>
     </div>

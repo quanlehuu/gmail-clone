@@ -1,4 +1,3 @@
-import EmailItem from "../../component/EmailItem";
 import InboxEmailList from "../../component/InboxEmailList";
 import styles from "./Home.module.scss";
 
