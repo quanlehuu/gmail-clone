@@ -1,14 +1,15 @@
-import styles from "./EmailDetail.module.scss";
+import styles from "./EmailDetailSpecial.module.scss";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import ReplyIcon from "@mui/icons-material/Reply";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import RedoIcon from "@mui/icons-material/Redo";
 
-function EmailDetail({ data, onStar }) {
+function EmailDetailSpecial({ data }) {
+  console.log(data);
   return (
     <div className={styles.wrapper}>
-      <div className={styles.title}>{data.email.subject}</div>
+      <div className={styles.title}>{data.subject}</div>
       <div className={styles.container}>
         <div className={styles.containerLeft}>
           <div className={styles.avatar}>
@@ -22,14 +23,10 @@ function EmailDetail({ data, onStar }) {
           <div className={styles.sender}>
             <span className={styles.userName}>{data.receiverEmail}</span>
             <div className={styles.manageSubject}>
-              <span className={styles.createAt}>{data.email.createdAt}</span>
+              <span className={styles.createAt}>{data.createdAt}</span>
               <div className={styles.dashbroadItem}>
-                <button className={styles.detailIcon} onClick={() => onStar()}>
-                  {data.starred ? (
-                    <StarIcon className={styles.iconItemYellow} />
-                  ) : (
-                    <StarOutlineIcon className={styles.iconItem} />
-                  )}
+                <button className={styles.detailIcon}>
+                  <StarOutlineIcon className={styles.iconItem} />
                 </button>
                 <button className={styles.detailIcon}>
                   <ReplyIcon className={styles.iconItem} />
@@ -41,7 +38,7 @@ function EmailDetail({ data, onStar }) {
             </div>
           </div>
           <div className={styles.content}>
-            <p>{data.email.content}</p>
+            <p>{data.content}</p>
           </div>
           <div className={styles.Mangereply}>
             <button className={styles.reply}>
@@ -57,4 +54,4 @@ function EmailDetail({ data, onStar }) {
   );
 }
 
-export default EmailDetail;
+export default EmailDetailSpecial;

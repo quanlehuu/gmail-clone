@@ -1,20 +1,21 @@
 import { useState } from "react";
-import EmailItem from "../EmailItem";
-import styles from "./InboxEmailList.module.scss";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import clsx from "clsx";
 import { useEffect } from "react";
 import { API_URL } from "../../constants";
+import styles from "./DraftEmailList.module.scss";
 import EmailDetail from "../EmailDetail";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EmailIcon from "@mui/icons-material/Email";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import clsx from "clsx";
+import SentEmailItem from "../SentEmailItem";
+import EmailDetailSpecial from "../EmailDetailSpecial";
 
 const token = localStorage.getItem("token");
 
-function InboxEmailList() {
+function DraftEmailList() {
   const [checkedItems, setCheckedItems] = useState([]);
   const [emailList, setEmailList] = useState([]);
   const [data, setData] = useState({});
@@ -23,12 +24,9 @@ function InboxEmailList() {
   const [dataDetail, setDataDetail] = useState({});
   const [indexDetail, setIndexDetail] = useState();
   useEffect(() => {
-    fetch(
-      `${API_URL}/get-inbox?input=${JSON.stringify({
-        page: page,
-      })}`,
-      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-    )
+    fetch(`${API_URL}/get-drafts`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -81,7 +79,6 @@ function InboxEmailList() {
       .then((response) => response.json())
       .then((result) => {});
   };
-  console.log(emailList);
   return (
     <>
       {showEmailDetail ? (
@@ -138,24 +135,24 @@ function InboxEmailList() {
         </div>
       )}
       {showEmailDetail ? (
-        <EmailDetail data={dataDetail} onStar={() => handleStar(indexDetail)} />
+        <EmailDetailSpecial data={dataDetail} />
       ) : (
         <div className={styles.emailList}>
           {emailList.map((item, index) => {
             return (
-              <EmailItem
+              <SentEmailItem
                 item={item}
-                key={item.email.id}
-                checked={checkedItems.includes(item.email.id)}
+                key={item.id}
+                checked={checkedItems.includes(item.id)}
                 onStar={() => handleStar(index)}
                 onCheck={() => {
-                  if (checkedItems.includes(item.email.id)) {
+                  if (checkedItems.includes(item.id)) {
                     setShowEmailDetail(false);
                     setCheckedItems(
-                      checkedItems.filter((id) => id !== item.email.id)
+                      checkedItems.filter((id) => id !== item.id)
                     );
                   } else {
-                    setCheckedItems([...checkedItems, item.email.id]);
+                    setCheckedItems([...checkedItems, item.id]);
                     setShowEmailDetail(false);
                   }
                 }}
@@ -169,4 +166,4 @@ function InboxEmailList() {
   );
 }
 
-export default InboxEmailList;
+export default DraftEmailList;

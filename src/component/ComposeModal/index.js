@@ -9,6 +9,7 @@ import Recipient from "../Recipients";
 import { useForm, FormProvider } from "react-hook-form";
 import { API_URL } from "../../constants";
 import { z } from "zod";
+import { useRef } from "react";
 
 const schema = z.object({
   to: z
@@ -36,11 +37,11 @@ function ComposeModal({ setCompose }) {
   const { register, reset, watch, handleSubmit } = methods;
   const watchAllFields = watch();
   const [id, setId] = useState();
+  const timeoutRef = useRef();
   useEffect(() => {
-    let timeout;
     const subscription = watch((value) => {
-      if (timeout) {
-        clearTimeout(timeout);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
       }
       const save = () => {
         fetch(`${API_URL}/save-email-draft`, {
@@ -63,18 +64,21 @@ function ComposeModal({ setCompose }) {
             }
           });
       };
-      timeout = setTimeout(save, 500);
+      timeoutRef.current = setTimeout(save, 500);
     });
     return () => subscription.unsubscribe();
   }, [watch, id]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const validation = schema.safeParse(data);
     if (validation.error) {
       alert(validation.error.issues[0].message);
       return;
     }
-    fetch(`${API_URL}/send-email`, {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    await fetch(`${API_URL}/send-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +95,9 @@ function ComposeModal({ setCompose }) {
       .then((result) => {
         // setCompose(false);
         alert("Submitted successfully");
+        setCompose(false);
       });
+    setId("");
     reset();
   };
   const handleClose = () => {

@@ -21,6 +21,7 @@ function StarredEmailList() {
   const [page, setPage] = useState(1);
   const [showEmailDetail, setShowEmailDetail] = useState(false);
   const [dataDetail, setDataDetail] = useState({});
+  const [indexDetail, setIndexDetail] = useState();
   useEffect(() => {
     fetch(`${API_URL}/get-starred`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -31,6 +32,7 @@ function StarredEmailList() {
         }
       })
       .then((data) => {
+        console.log(data);
         setEmailList(data.result.data.data);
         setData(data.result.data);
       });
@@ -52,12 +54,12 @@ function StarredEmailList() {
       setPage(page - 1);
     }
   };
-  const handleShowDetail = (item) => {
+  const handleShowDetail = (item, index) => {
     setShowEmailDetail(true);
     setDataDetail(item);
+    setIndexDetail(index);
   };
   const handleStar = async (index) => {
-    setShowEmailDetail(false);
     const email = emailList[index];
     const newEmailList = emailList.filter(
       (item) => item.email.id !== email.email.id
@@ -130,36 +132,11 @@ function StarredEmailList() {
                 <ChevronRightIcon className={clsx(styles.iconRight)} />
               </button>
             </div>
-            <div className={styles.dashbroadEmail}>
-              <span>
-                1-{emailList.length} of {data.total}
-              </span>
-              <div className={styles.dashbroadEmailItem}>
-                <button className={styles.icon} onClick={handleBack}>
-                  {page > 1 ? (
-                    <ChevronLeftIcon
-                      className={clsx(styles.iconLeft, styles.active)}
-                    />
-                  ) : (
-                    <ChevronLeftIcon className={styles.iconLeft} />
-                  )}
-                </button>
-                <button className={styles.icon} onClick={handleNext}>
-                  {emailList.length + (page - 1) * 50 < data.total ? (
-                    <ChevronRightIcon
-                      className={clsx(styles.iconRight, styles.active)}
-                    />
-                  ) : (
-                    <ChevronRightIcon className={styles.iconRight} />
-                  )}
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       )}
       {showEmailDetail ? (
-        <EmailDetail data={dataDetail} />
+        <EmailDetail data={dataDetail} onStar={() => handleStar(indexDetail)} />
       ) : (
         <div className={styles.emailList}>
           {emailList.map((item, index) => {
@@ -180,7 +157,7 @@ function StarredEmailList() {
                     setShowEmailDetail(false);
                   }
                 }}
-                onShowDetail={() => handleShowDetail(item)}
+                onShowDetail={() => handleShowDetail(item, index)}
               />
             );
           })}
